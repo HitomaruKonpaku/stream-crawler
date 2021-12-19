@@ -1,5 +1,5 @@
 // eslint-disable-next-line camelcase
-import child_process from 'child_process'
+import child_process, { SpawnOptions } from 'child_process'
 import { logger as baseLogger } from './logger'
 
 const logger = baseLogger.child({ label: '[Downloader]' })
@@ -14,9 +14,10 @@ export class Downloader {
     args.push(url)
     logger.verbose(`${cmd} ${args.join(' ')}`)
 
+    const spawnOptions: SpawnOptions = { stdio: 'ignore' }
     // eslint-disable-next-line @typescript-eslint/no-unused-vars
     const cp = process.platform === 'win32'
-      ? child_process.spawn(process.env.comspec, ['/c', cmd, ...args])
-      : child_process.spawn(cmd, args)
+      ? child_process.spawn(process.env.comspec, ['/c', cmd, ...args], spawnOptions)
+      : child_process.spawn(cmd, args, spawnOptions)
   }
 }
