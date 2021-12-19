@@ -1,0 +1,10 @@
+{
+  "twitcasting": {
+    "interval": 20000,
+    "users": [
+      {
+        "id": "c:nakaoka_15"
+      }
+    ]
+  }
+}

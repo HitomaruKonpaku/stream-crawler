@@ -1,0 +1,10 @@
+node_modules/
+dist/
+logs/
+.vscode/
+.idea/
+.tmp/
+download/
+
+.env
+config.json
