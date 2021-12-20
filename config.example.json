@@ -3,7 +3,18 @@
     "interval": 20000,
     "users": [
       {
+        "id": "nakiriayame"
+      },
+      {
         "id": "c:nakaoka_15"
+      }
+    ],
+    "discordWebhooks": [
+      {
+        "url": "",
+        "users": [
+          "153363129915539457"
+        ]
       }
     ]
   }
