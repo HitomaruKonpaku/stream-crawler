@@ -3,6 +3,8 @@ import { configManager } from './ConfigManager'
 import { logger } from './logger'
 import { twitCastingCrawler } from './modules/TwitCastingCrawler'
 
+logger.info(Array(50).fill('=').join(''))
+
 twitCastingCrawler.on('live', async ({ user }) => {
   const webhooks: any[] = configManager.config?.twitcasting?.discordWebhooks || []
   if (!webhooks.length) {
