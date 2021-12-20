@@ -33,8 +33,12 @@ class TwitCastingCrawler {
     try {
       const data = await this.getUser(user.id)
       const { movie } = data
-      const streamUrl = this.getStreamUrl(user.id, movie.id)
+      if (!movie) {
+        this.handleUserWithTimer(user)
+        return
+      }
       if (movie.live && !this.liveIds.has(movie.id)) {
+        const streamUrl = this.getStreamUrl(user.id, movie.id)
         this.logger.info(`[${user.id}] Found new live stream @ ${streamUrl}`)
         const dir = path.join(__dirname, APP_DOWNLOAD_DIR)
         const output = path.join(dir, '%(id)s.%(ext)s')
@@ -47,6 +51,10 @@ class TwitCastingCrawler {
     } catch (error) {
       this.logger.error(`handleUser: ${error.message}`)
     }
+    this.handleUserWithTimer(user)
+  }
+
+  private handleUserWithTimer(user: any) {
     setTimeout(() => this.handleUser(user), this.interval)
   }
 
