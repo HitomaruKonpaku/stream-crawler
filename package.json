@@ -11,6 +11,7 @@
   "license": "ISC",
   "dependencies": {
     "axios": "^0.24.0",
+    "bottleneck": "^2.19.5",
     "tslib": "^2.3.1",
     "winston": "^3.3.3",
     "winston-daily-rotate-file": "^4.5.5"
