@@ -22,7 +22,10 @@ class TwitCastingCrawler {
 
   public async start() {
     this.logger.info('start')
-    this.users.forEach((user) => this.handleUser(user))
+    this.users.forEach((user) => {
+      this.logger.info(`Watching user [${user.id}]`, user)
+      this.handleUser(user)
+    })
   }
 
   private async handleUser(user: any) {
