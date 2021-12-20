@@ -23,7 +23,7 @@ class TwitCastingCrawler {
   public async start() {
     this.logger.info('start')
     this.users.forEach((user) => {
-      this.logger.info(`Watching user [${user.id}]`, user)
+      this.logger.info(`[${user.id}] Watching`, user)
       this.handleUser(user)
     })
   }
@@ -33,13 +33,16 @@ class TwitCastingCrawler {
     try {
       const data = await this.getUser(user.id)
       const { movie } = data
+      const streamUrl = this.getStreamUrl(user.id, movie.id)
       if (movie.live && !this.liveIds.has(movie.id)) {
-        const streamUrl = this.getStreamUrl(user.id, movie.id)
-        this.logger.info(`Found new live stream @ ${streamUrl}`)
+        this.logger.info(`[${user.id}] Found new live stream @ ${streamUrl}`)
         const dir = path.join(__dirname, APP_DOWNLOAD_DIR)
         const output = path.join(dir, '%(id)s.%(ext)s')
         Downloader.downloadUrl(streamUrl, { output })
         this.liveIds.add(movie.id)
+      } else if (!movie.live && this.liveIds.has(movie.id)) {
+        this.logger.info(`[${user.id}] Live stream ended`)
+        this.liveIds.delete(movie.id)
       }
     } catch (error) {
       this.logger.error(`handleUser: ${error.message}`)
