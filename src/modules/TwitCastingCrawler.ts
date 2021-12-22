@@ -48,7 +48,7 @@ export class TwitCastingCrawler extends EventEmitter {
         Object.assign(user, userData)
       }
     } catch (error) {
-      this.logger.error(`initUser: ${error.message}`)
+      this.logger.error(`[${user.id}] initUser: ${error.message}`)
     }
   }
 
@@ -74,7 +74,7 @@ export class TwitCastingCrawler extends EventEmitter {
         this.liveIds.delete(movie.id)
       }
     } catch (error) {
-      this.logger.error(`handleUser: ${error.message}`)
+      this.logger.error(`[${user.id}] handleUser: ${error.message}`)
     }
     this.handleUserWithTimer(user)
   }
