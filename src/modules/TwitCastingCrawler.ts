@@ -65,7 +65,7 @@ export class TwitCastingCrawler extends EventEmitter {
         const streamUrl = TwitCastingCrawler.getStreamUrl(user.id, movie.id)
         this.logger.info(`[${user.id}] Found new live stream @ ${streamUrl}`)
         const dir = path.join(__dirname, APP_DOWNLOAD_DIR)
-        const output = path.join(dir, '[%(uploader_id)s][%(upload_date)s] %(title)s (%(id)s).%(ext)s')
+        const output = path.join(dir, '[%(uploader_id)s] (%(id)s).%(ext)s')
         Downloader.downloadUrl(streamUrl, { output })
         this.liveIds.add(movie.id)
         this.emit('live', { user, movie })
