@@ -3,10 +3,10 @@ import Bottleneck from 'bottleneck'
 import EventEmitter from 'events'
 import path from 'path'
 import winston from 'winston'
-import { configManager } from '../ConfigManager'
 import { APP_DOWNLOAD_DIR } from '../constants/app.constant'
 import { Downloader } from '../Downloader'
 import { logger as baseLogger } from '../logger'
+import { configManager } from './ConfigManager'
 
 export class TwitCastingCrawler extends EventEmitter {
   private logger: winston.Logger

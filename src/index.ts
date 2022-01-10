@@ -1,6 +1,6 @@
 import axios from 'axios'
-import { configManager } from './ConfigManager'
 import { logger } from './logger'
+import { configManager } from './modules/ConfigManager'
 import { twitCastingCrawler } from './modules/TwitCastingCrawler'
 
 logger.info(Array(50).fill('=').join(''))

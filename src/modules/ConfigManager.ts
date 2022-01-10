@@ -1,8 +1,8 @@
 import { readFileSync } from 'fs'
 import path from 'path'
 import winston from 'winston'
-import { APP_DEFAULT_CONFIG_PATH } from './constants/app.constant'
-import { logger as baseLogger } from './logger'
+import { APP_DEFAULT_CONFIG_PATH } from '../constants/app.constant'
+import { logger as baseLogger } from '../logger'
 
 class ConfigManager {
   public config: Record<string, any>
