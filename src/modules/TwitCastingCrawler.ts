@@ -33,9 +33,8 @@ export class TwitCastingCrawler extends EventEmitter {
   public async start() {
     this.logger.info('start')
     this.users.forEach(async (user) => {
-      this.logger.info(`[${user.id}] Init user`, user)
       await this.initUser(user)
-      this.logger.info(`[${user.id}] Watch user`, user)
+      this.logger.info(`[${user.id}] Monitoring user...`, user)
       await this.handleUser(user)
     })
   }
@@ -53,7 +52,6 @@ export class TwitCastingCrawler extends EventEmitter {
   }
 
   private async handleUser(user: any) {
-    this.logger.debug(`[${user.id}] handleUser`)
     try {
       const data = await this.limiter.schedule(() => this.getUserStream(user.id))
       const { movie } = data
@@ -85,15 +83,17 @@ export class TwitCastingCrawler extends EventEmitter {
 
   private async getUser(id: string) {
     const url = `https://frontendapi.twitcasting.tv/users/${id}?detail=true`
-    this.logger.debug('getUser', { id, url })
+    this.logger.debug(`--> getUser: ${id}`, { id, url })
     const { data } = await axios.get(url)
+    this.logger.debug(`<-- getUser: ${id}`)
     return data
   }
 
   private async getUserStream(id: string) {
     const url = `https://twitcasting.tv/streamserver.php?target=${id}&mode=client`
-    this.logger.debug('getUserStream', { id, url })
+    this.logger.debug(`--> getUserStream: ${id}`, { id, url })
     const { data } = await axios.get(url)
+    this.logger.debug(`<-- getUserStream: ${id}`)
     return data
   }
 }

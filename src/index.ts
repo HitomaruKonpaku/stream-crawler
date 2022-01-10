@@ -3,7 +3,7 @@ import { logger } from './logger'
 import { configManager } from './modules/ConfigManager'
 import { twitCastingCrawler } from './modules/TwitCastingCrawler'
 
-logger.info(Array(50).fill('=').join(''))
+logger.info(Array(80).fill('=').join(''))
 
 twitCastingCrawler.on('live', async ({ user }) => {
   const webhooks: any[] = configManager.config?.twitcasting?.discordWebhooks || []
