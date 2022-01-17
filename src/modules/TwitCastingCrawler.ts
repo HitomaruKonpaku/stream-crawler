@@ -6,6 +6,7 @@ import winston from 'winston'
 import { APP_DOWNLOAD_DIR } from '../constants/app.constant'
 import { Downloader } from '../Downloader'
 import { logger as baseLogger } from '../logger'
+import { Util } from '../utils/Util'
 import { configManager } from './ConfigManager'
 
 export class TwitCastingCrawler extends EventEmitter {
@@ -63,7 +64,7 @@ export class TwitCastingCrawler extends EventEmitter {
         const streamUrl = TwitCastingCrawler.getStreamUrl(user.id, movie.id)
         this.logger.info(`[${user.id}] Found new live stream @ ${streamUrl}`)
         const dir = path.join(__dirname, APP_DOWNLOAD_DIR)
-        const output = path.join(dir, '[%(uploader_id)s] (%(id)s).%(ext)s')
+        const output = path.join(dir, `[%(uploader_id)s][${Util.getTimeString()}] (%(id)s).%(ext)s`)
         Downloader.downloadUrl(streamUrl, { output })
         this.liveIds.add(movie.id)
         this.emit('live', { user, movie })
