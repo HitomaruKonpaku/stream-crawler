@@ -1,20 +1,21 @@
 import axios from 'axios'
-import Bottleneck from 'bottleneck'
 import EventEmitter from 'events'
 import path from 'path'
 import winston from 'winston'
 import { APP_DOWNLOAD_DIR } from '../constants/app.constant'
 import { Downloader } from '../Downloader'
+import { twitCastingLimiter } from '../Limiter'
 import { logger as baseLogger } from '../logger'
 import { Util } from '../utils/Util'
 import { configManager } from './ConfigManager'
+import { Webhook } from './Webhook'
 
 export class TwitCastingCrawler extends EventEmitter {
   private logger: winston.Logger
   private config: Record<string, any>
   private interval: number
   private users: any[]
-  private limiter: Bottleneck
+
   private liveIds: Set<string> = new Set()
 
   constructor() {
@@ -23,7 +24,6 @@ export class TwitCastingCrawler extends EventEmitter {
     this.config = configManager.config?.twitcasting || {}
     this.interval = this.config.interval || 30000
     this.users = (this.config.users || []).filter((v) => v.id)
-    this.limiter = new Bottleneck({ maxConcurrent: 10 })
   }
 
   public static getStreamUrl(userId: string, movieId: string) {
@@ -43,7 +43,7 @@ export class TwitCastingCrawler extends EventEmitter {
   private async initUser(user: any) {
     this.logger.debug(`[${user.id}] initUser`)
     try {
-      const { user: userData } = await this.limiter.schedule(() => this.getUser(user.id))
+      const { user: userData } = await twitCastingLimiter.schedule(() => this.getUser(user.id))
       if (userData) {
         Object.assign(user, userData)
       }
@@ -54,7 +54,7 @@ export class TwitCastingCrawler extends EventEmitter {
 
   private async handleUser(user: any) {
     try {
-      const data = await this.limiter.schedule(() => this.getUserStream(user.id))
+      const data = await twitCastingLimiter.schedule(() => this.getUserStream(user.id))
       const { movie } = data
       if (!movie) {
         this.handleUserWithTimer(user)
@@ -65,9 +65,9 @@ export class TwitCastingCrawler extends EventEmitter {
         this.logger.info(`[${user.id}] Found new live stream @ ${streamUrl}`)
         const dir = path.join(__dirname, APP_DOWNLOAD_DIR)
         const output = path.join(dir, `[%(uploader_id)s][${Util.getTimeString()}] (%(id)s).%(ext)s`)
-        Downloader.downloadUrl(streamUrl, { output })
         this.liveIds.add(movie.id)
-        this.emit('live', { user, movie })
+        this.sendWebhooks(user, movie)
+        Downloader.downloadUrl(streamUrl, { output })
       } else if (!movie.live && this.liveIds.has(movie.id)) {
         this.logger.info(`[${user.id}] Live stream ended`)
         this.liveIds.delete(movie.id)
@@ -96,6 +96,11 @@ export class TwitCastingCrawler extends EventEmitter {
     const { data } = await axios.get(url)
     this.logger.debug(`<-- getUserStream: ${id}`)
     return data
+  }
+
+  private sendWebhooks(user: any, movie: any) {
+    this.logger.debug('sendWebhooks', { user, movie })
+    new Webhook().sendTwitCasting(user, movie)
   }
 }
 
