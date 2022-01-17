@@ -8,13 +8,24 @@
       {
         "id": "c:nakaoka_15"
       }
-    ],
-    "discordWebhooks": [
+    ]
+  },
+  "webhooks": {
+    "discord": [
       {
-        "url": "",
-        "users": [
-          "153363129915539457"
-        ]
+        "active": true,
+        "urls": [
+          ""
+        ],
+        "twitcasting": [
+          "<all>"
+        ],
+        "mentions": {
+          "roleIds": [],
+          "userIds": [
+            "153363129915539457"
+          ]
+        }
       }
     ]
   }
