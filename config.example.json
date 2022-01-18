@@ -7,7 +7,18 @@
       },
       {
         "id": "c:nakaoka_15"
-      }
+      },
+      {}
+    ]
+  },
+  "youtube": {
+    "interval": 30000,
+    "users": [
+      {
+        "name": "Nakiri Ayame",
+        "id": "UC7fk0CB07ly8oSl0aqKkqFg"
+      },
+      {}
     ]
   },
   "webhooks": {
@@ -18,6 +29,9 @@
           ""
         ],
         "twitcasting": [
+          "<all>"
+        ],
+        "youtube": [
           "<all>"
         ],
         "mentions": {
