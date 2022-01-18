@@ -4,6 +4,7 @@ import winston from 'winston'
 import { discordWebhookLimiter } from '../Limiter'
 import { logger as baseLogger } from '../logger'
 import { TwitCastingUtil } from '../utils/TwitCastingUtil'
+import { YouTubeUtil } from '../utils/YouTubeUtil'
 import { configManager } from './ConfigManager'
 
 export class Webhook {
@@ -20,6 +21,10 @@ export class Webhook {
 
   public sendTwitCasting(user: any, movie: any) {
     this.sendTwitCastingDiscord(user, movie)
+  }
+
+  public sendYouTube(user: any, videoId: string) {
+    this.sendYouTubeDiscord(user, videoId)
   }
 
   private async post(url: string, body: any) {
@@ -91,7 +96,44 @@ export class Webhook {
         // Send
         urls.forEach((url) => discordWebhookLimiter.schedule(() => this.post(url, payload)))
       } catch (error) {
-        this.logger.error(`sendTwitCastingDiscord: ${error.message}`)
+        this.logger.error(`sendTwitCastingDiscord: ${user.id}: ${error.message}`)
+      }
+    })
+  }
+
+  private sendYouTubeDiscord(user: any, videoId: string) {
+    const configs = Array.from<any>(this.config?.discord || [])
+    configs.forEach((config) => {
+      if (!config.active) {
+        return
+      }
+      const urls = Array.from<string>(config.urls || [])
+        .filter((v) => v)
+      const channelIds = Array.from<string>(config.youtube || [])
+        .filter((v) => v)
+        .map((v) => v.toLowerCase())
+      if (!urls.length || !channelIds.length) {
+        return
+      }
+      if (!channelIds.find((v) => v === '<all>') && !channelIds.some((v) => v === user.id.toLowerCase())) {
+        return
+      }
+      try {
+        // Build content with mentions
+        let content = ''
+        Array.from(config.mentions?.roleIds || []).forEach((id) => {
+          content += `<@&${id}> `
+        })
+        Array.from(config.mentions?.userIds || []).forEach((id) => {
+          content += `<@${id}> `
+        })
+        content = [content, YouTubeUtil.getVideoUrl(videoId)].map((v) => v.trim()).join('\n')
+        // Build request payload
+        const payload = { content }
+        // Send
+        urls.forEach((url) => discordWebhookLimiter.schedule(() => this.post(url, payload)))
+      } catch (error) {
+        this.logger.error(`sendYouTubeDiscord: ${user.name || user.id}: ${error.message}`)
       }
     })
   }

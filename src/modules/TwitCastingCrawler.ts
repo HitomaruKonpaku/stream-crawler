@@ -13,6 +13,7 @@ import { Webhook } from './Webhook'
 
 interface User {
   id: string
+  name?: string
   [key: string]: any
 }
 

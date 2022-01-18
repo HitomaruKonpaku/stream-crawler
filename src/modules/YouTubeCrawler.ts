@@ -8,10 +8,11 @@ import { youTubeLimiter } from '../Limiter'
 import { logger as baseLogger } from '../logger'
 import { YouTubeUtil } from '../utils/YouTubeUtil'
 import { configManager } from './ConfigManager'
+import { Webhook } from './Webhook'
 
 interface User {
   id: string
-  name: string
+  name?: string
 }
 
 export class YouTubeCrawler extends EventEmitter {
@@ -90,7 +91,7 @@ export class YouTubeCrawler extends EventEmitter {
 
   private sendWebhooks(user: User, videoId: string) {
     this.logger.debug('sendWebhooks', { user, videoId })
-    // new Webhook()
+    new Webhook().sendYouTube(user, videoId)
   }
 }
 
