@@ -74,11 +74,11 @@ export class Webhook {
               type: 'rich',
               title: 'Live!',
               description: [`${user.name || user.id} is now live`, TwitCastingUtil.getMovieUrl(user.id, movie.id)].join('\n'),
-              url: `https://twitcasting.tv/${user.id}`,
+              url: TwitCastingUtil.getUserUrl(user.id),
               color: 0x4589ff,
               author: {
                 name: user.name || user.id,
-                url: `https://twitcasting.tv/${user.id}`,
+                url: TwitCastingUtil.getUserUrl(user.id),
                 icon_url: `https:${user.image}`,
               },
               footer: {

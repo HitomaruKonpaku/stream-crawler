@@ -6,80 +6,80 @@ import { APP_DOWNLOAD_DIR } from '../constants/app.constant'
 import { Downloader } from '../Downloader'
 import { twitCastingLimiter } from '../Limiter'
 import { logger as baseLogger } from '../logger'
+import { TwitCastingUtil } from '../utils/TwitCastingUtil'
 import { Util } from '../utils/Util'
 import { configManager } from './ConfigManager'
 import { Webhook } from './Webhook'
 
+interface User {
+  id: string
+  [key: string]: any
+}
+
 export class TwitCastingCrawler extends EventEmitter {
   private logger: winston.Logger
-  private config: Record<string, any>
   private interval: number
-  private users: any[]
-
-  private liveIds: Set<string> = new Set()
+  private users: User[]
+  private videoIds = new Set<string>()
 
   constructor() {
     super()
     this.logger = baseLogger.child({ label: '[TwitCastingCrawler]' })
-    this.config = configManager.config?.twitcasting || {}
-    this.interval = this.config.interval || 30000
-    this.users = (this.config.users || []).filter((v) => v.id)
-  }
 
-  public static getStreamUrl(userId: string, movieId: string) {
-    const url = `https://twitcasting.tv/${userId}/movie/${movieId}`
-    return url
+    const config = configManager.config?.twitcasting || {}
+    this.interval = config.interval || 30000
+    this.users = (config.users || []).filter((v) => v.id)
   }
 
   public async start() {
     this.logger.info('start')
-    this.users.forEach(async (user) => {
-      await this.initUser(user)
-      this.logger.info(`[${user.id}] Monitoring user...`, user)
-      await this.handleUser(user)
-    })
+    this.users.forEach((user) => this.monitorUser(user))
   }
 
-  private async initUser(user: any) {
-    this.logger.debug(`[${user.id}] initUser`)
+  private async monitorUser(user: User) {
+    await this.initUser(user)
+    this.logger.info(`monitorUser: ${user.id}`, user)
+    await this.checkUser(user)
+  }
+
+  private async initUser(user: User) {
     try {
-      const { user: userData } = await twitCastingLimiter.schedule(() => this.getUser(user.id))
-      if (userData) {
-        Object.assign(user, userData)
+      const { user: data } = await twitCastingLimiter.schedule(() => this.getUser(user.id))
+      if (data) {
+        Object.assign(user, data)
       }
     } catch (error) {
-      this.logger.error(`[${user.id}] initUser: ${error.message}`)
+      this.logger.error(`initUser: ${user.id}: ${error.message}`)
     }
   }
 
-  private async handleUser(user: any) {
+  private async checkUser(user: User) {
     try {
       const data = await twitCastingLimiter.schedule(() => this.getUserStream(user.id))
       const { movie } = data
       if (!movie) {
-        this.handleUserWithTimer(user)
+        this.checkUserWithTimeout(user)
         return
       }
-      if (movie.live && !this.liveIds.has(movie.id)) {
-        const streamUrl = TwitCastingCrawler.getStreamUrl(user.id, movie.id)
-        this.logger.info(`[${user.id}] Found new live stream @ ${streamUrl}`)
-        const dir = path.join(__dirname, APP_DOWNLOAD_DIR)
-        const output = path.join(dir, `[%(uploader_id)s][${Util.getTimeString()}] (%(id)s).%(ext)s`)
-        this.liveIds.add(movie.id)
+      if (movie.live && !this.videoIds.has(movie.id)) {
+        this.videoIds.add(movie.id)
+        const movieUrl = TwitCastingUtil.getMovieUrl(user.id, movie.id)
+        this.logger.info(`${user.id} live: ${movieUrl}`)
         this.sendWebhooks(user, movie)
-        Downloader.downloadUrl(streamUrl, { output })
-      } else if (!movie.live && this.liveIds.has(movie.id)) {
-        this.logger.info(`[${user.id}] Live stream ended`)
-        this.liveIds.delete(movie.id)
+        const output = path.join(__dirname, APP_DOWNLOAD_DIR, 'twitcasting', `[%(uploader_id)s][${Util.getTimeString()}] (%(id)s).%(ext)s`)
+        Downloader.downloadUrl(movieUrl, { output })
+      } else if (!movie.live && this.videoIds.has(movie.id)) {
+        this.logger.info(`${user.id} live ended`)
+        this.videoIds.delete(movie.id)
       }
     } catch (error) {
-      this.logger.error(`[${user.id}] handleUser: ${error.message}`)
+      this.logger.error(`checkUser: ${user.id}: ${error.message}`)
     }
-    this.handleUserWithTimer(user)
+    this.checkUserWithTimeout(user)
   }
 
-  private handleUserWithTimer(user: any) {
-    setTimeout(() => this.handleUser(user), this.interval)
+  private checkUserWithTimeout(user: User) {
+    setTimeout(() => this.checkUser(user), this.interval)
   }
 
   private async getUser(id: string) {
@@ -98,7 +98,7 @@ export class TwitCastingCrawler extends EventEmitter {
     return data
   }
 
-  private sendWebhooks(user: any, movie: any) {
+  private sendWebhooks(user: User, movie: any) {
     this.logger.debug('sendWebhooks', { user, movie })
     new Webhook().sendTwitCasting(user, movie)
   }

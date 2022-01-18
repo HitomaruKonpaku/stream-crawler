@@ -1,5 +1,9 @@
 export class TwitCastingUtil {
+  public static getUserUrl(userId: string) {
+    return `https://twitcasting.tv/${userId}`
+  }
+
   public static getMovieUrl(userId: string, movieId: string) {
-    return `https://twitcasting.tv/${userId}/movie/${movieId}`
+    return `${this.getUserUrl(userId)}/movie/${movieId}`
   }
 }
