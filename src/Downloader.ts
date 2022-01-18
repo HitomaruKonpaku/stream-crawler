@@ -14,10 +14,14 @@ export class Downloader {
     args.push(url)
     logger.verbose(`${cmd} ${args.join(' ')}`)
 
-    const spawnOptions: SpawnOptions = { stdio: 'ignore' }
+    const spawnOptions: SpawnOptions = {
+      stdio: 'ignore',
+      // detached: true,
+    }
     // eslint-disable-next-line @typescript-eslint/no-unused-vars
     const cp = process.platform === 'win32'
       ? child_process.spawn(process.env.comspec, ['/c', cmd, ...args], spawnOptions)
       : child_process.spawn(cmd, args, spawnOptions)
+    // cp.unref()
   }
 }
