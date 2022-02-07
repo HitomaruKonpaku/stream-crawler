@@ -67,7 +67,7 @@ export class TwitCastingCrawler extends EventEmitter {
         const movieUrl = TwitCastingUtil.getMovieUrl(user.id, movie.id)
         this.logger.info(`${user.id} live: ${movieUrl}`)
         this.sendWebhooks(user, movie)
-        const output = path.join(__dirname, APP_DOWNLOAD_DIR, 'twitcasting', `[%(uploader_id)s][${Util.getTimeString()}] (%(id)s).%(ext)s`)
+        const output = path.join(__dirname, APP_DOWNLOAD_DIR, 'twitcasting', `[%(uploader_id)s][${Util.getTimeString()}] %(title)s (%(id)s).%(ext)s`)
         Downloader.downloadUrl(movieUrl, { output })
       } else if (!movie.live && this.videoIds.has(movie.id)) {
         this.logger.info(`${user.id} live ended`)
