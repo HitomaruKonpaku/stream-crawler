@@ -68,7 +68,12 @@ export class TwitCastingCrawler extends EventEmitter {
         this.logger.info(`${user.id} live: ${movieUrl}`)
         this.sendWebhooks(user, movie)
         const output = path.join(__dirname, APP_DOWNLOAD_DIR, 'twitcasting', `[%(uploader_id)s][${Util.getTimeString()}] %(title)s (%(id)s).%(ext)s`)
-        Downloader.downloadUrl(movieUrl, { output })
+        Downloader.downloadUrl(movieUrl, {
+          output,
+          // Add formatSort due to yt-dlp error
+          // websockets.exceptions.InvalidStatusCode: server rejected WebSocket connection: HTTP 403
+          formatSort: 'proto:m3u8',
+        })
       } else if (!movie.live && this.videoIds.has(movie.id)) {
         this.logger.info(`${user.id} live ended`)
         this.videoIds.delete(movie.id)
