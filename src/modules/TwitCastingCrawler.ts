@@ -72,7 +72,7 @@ export class TwitCastingCrawler extends EventEmitter {
           output,
           // Add formatSort due to yt-dlp error
           // websockets.exceptions.InvalidStatusCode: server rejected WebSocket connection: HTTP 403
-          formatSort: 'proto:m3u8',
+          // formatSort: 'proto:m3u8',
         })
       } else if (!movie.live && this.videoIds.has(movie.id)) {
         this.logger.info(`${user.id} live ended`)
