@@ -8,6 +8,18 @@ function getPrintFormat() {
     : `${info.timestamp} | [${info.level}] ${[info.label, info.message].filter((v) => v).join(' ')}`))
 }
 
+function getFileName() {
+  return `${process.env.NODE_ENV || 'dev'}.%DATE%`
+}
+
+const consoleTransport = new winston.transports.Console({
+  level: 'info',
+  format: format.combine(
+    format.colorize(),
+    getPrintFormat(),
+  ),
+})
+
 const logger = winston.createLogger({
   format: format.combine(
     format.timestamp(),
@@ -23,30 +35,29 @@ const logger = winston.createLogger({
     })(),
   ),
   transports: [
-    new winston.transports.Console({
-      level: process.env.NODE_ENV === 'production'
-        ? 'verbose'
-        : 'silly',
-      format: format.combine(
-        format.colorize(),
-        getPrintFormat(),
-      ),
-    }),
+    consoleTransport,
     new DailyRotateFile({
       level: 'verbose',
       format: format.combine(getPrintFormat()),
       datePattern: LOGGER_DATE_PATTERN,
       dirname: LOGGER_DIR,
-      filename: '%DATE%.log',
+      filename: `${getFileName()}.log`,
     }),
     new DailyRotateFile({
       level: 'silly',
       format: format.combine(getPrintFormat()),
       datePattern: LOGGER_DATE_PATTERN,
       dirname: LOGGER_DIR,
-      filename: '%DATE%_all.log',
+      filename: `${getFileName()}_all.log`,
     }),
   ],
 })
 
-export { logger }
+function toggleDebugConsole() {
+  consoleTransport.level = 'debug'
+}
+
+export {
+  logger,
+  toggleDebugConsole,
+}
