@@ -2,7 +2,7 @@ import axios from 'axios'
 import EventEmitter from 'events'
 import path from 'path'
 import winston from 'winston'
-import { APP_DOWNLOAD_DIR } from '../constants/app.constant'
+import { APP_DEFAULT_REFRESH_INTERVAL, APP_DOWNLOAD_DIR } from '../constants/app.constant'
 import { Downloader } from '../Downloader'
 import { twitCastingLimiter } from '../Limiter'
 import { logger as baseLogger } from '../logger'
@@ -26,14 +26,17 @@ export class TwitCastingCrawler extends EventEmitter {
   constructor() {
     super()
     this.logger = baseLogger.child({ label: '[TwitCastingCrawler]' })
-
-    const config = configManager.config?.twitcasting || {}
-    this.interval = config.interval || 30000
-    this.users = (config.users || []).filter((v) => v.id)
   }
 
   public async start() {
     this.logger.info('start')
+
+    const config = configManager.config?.twitcasting || {}
+    this.interval = config.interval || APP_DEFAULT_REFRESH_INTERVAL
+    this.users = Array.from<any>(config.users || [])
+      .filter((v) => typeof v === 'string' || v.id)
+      .map((v) => (typeof v !== 'string' ? v : { id: v }))
+
     this.users.forEach((user) => this.monitorUser(user))
   }
 

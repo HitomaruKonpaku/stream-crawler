@@ -2,7 +2,7 @@ import axios from 'axios'
 import EventEmitter from 'events'
 import path from 'path'
 import winston from 'winston'
-import { APP_DOWNLOAD_DIR } from '../constants/app.constant'
+import { APP_DEFAULT_REFRESH_INTERVAL, APP_DOWNLOAD_DIR } from '../constants/app.constant'
 import { Downloader } from '../Downloader'
 import { youTubeLimiter } from '../Limiter'
 import { logger as baseLogger } from '../logger'
@@ -21,23 +21,44 @@ export class YouTubeCrawler extends EventEmitter {
   private users: User[]
   private videoIds = new Set<string>()
 
+  private readonly headers = {
+    'accept-language': 'en-US,en',
+    'user-agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/100.0.4896.75 Safari/537.36',
+  }
+
   constructor() {
     super()
     this.logger = baseLogger.child({ label: '[YouTubeCrawler]' })
-
-    const config = configManager.config?.youtube || {}
-    this.interval = config.interval || 30000
-    this.users = (config.users || []).filter((v) => v.id)
   }
 
   public async start() {
     this.logger.info('start')
+
+    const config = configManager.config?.youtube || {}
+    this.interval = config.interval || APP_DEFAULT_REFRESH_INTERVAL
+    this.users = Array.from<any>(config.users || [])
+      .filter((v) => typeof v === 'string' || v.id)
+      .map((v) => (typeof v !== 'string' ? v : { id: v, name: v }))
+
     this.users.forEach((user) => this.monitorUser(user))
   }
 
   private async monitorUser(user: User) {
+    await this.initUser(user)
     this.logger.info(`monitorUser: ${user.name}`, user)
     await this.checkUser(user)
+  }
+
+  private async initUser(user: User) {
+    try {
+      const data = await youTubeLimiter.schedule(() => this.getChannel(user.id))
+      const name = data.match(/(?<=<title>).*(?=<\/title>)/)
+        ?.[0]
+        ?.replace?.(' - YouTube', '')
+      Object.assign(user, { name })
+    } catch (error) {
+      this.logger.error(`initUser: ${user.id}: ${error.message}`)
+    }
   }
 
   private async checkUser(user: User) {
@@ -73,18 +94,18 @@ export class YouTubeCrawler extends EventEmitter {
     }
   }
 
+  private async getChannel(id: string) {
+    const url = `https://www.youtube.com/channel/${id}`
+    this.logger.debug(`--> getChannel: ${id}`, { id, url })
+    const { data } = await axios.get<string>(url, { headers: this.headers })
+    this.logger.debug(`<-- getChannel: ${id}`)
+    return data
+  }
+
   private async getChannelLive(user: User) {
     const url = `https://www.youtube.com/channel/${user.id}/live`
     this.logger.debug(`--> getChannelLive: ${user.name}`, { id: user.id, url })
-    const { data } = await axios.get<string>(
-      url,
-      {
-        headers: {
-          'accept-language': 'en-US,en',
-          'user-agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/97.0.4692.71 Safari/537.36',
-        },
-      },
-    )
+    const { data } = await axios.get<string>(url, { headers: this.headers })
     this.logger.debug(`<-- getChannelLive: ${user.name}`)
     return data
   }

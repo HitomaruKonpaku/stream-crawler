@@ -1,8 +1,14 @@
 import { logger } from './logger'
+import { configManager } from './modules/ConfigManager'
 import { twitCastingCrawler } from './modules/TwitCastingCrawler'
 import { youTubeCrawler } from './modules/YouTubeCrawler'
 
 logger.info(Array(80).fill('=').join(''))
 
-twitCastingCrawler.start()
-youTubeCrawler.start()
+async function main() {
+  configManager.load()
+  twitCastingCrawler.start()
+  youTubeCrawler.start()
+}
+
+main()
