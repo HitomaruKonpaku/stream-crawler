@@ -34,7 +34,7 @@ npm run build
 
 1. Clone and rename
     - [config.example.yaml](config.example.yaml) to `config.yaml`
-    - Or [config.example.yaml](config.example.yaml) to `config.json`
+    - Or [config.example.json](config.example.json) to `config.json`
 1. Start normally or with `pm2`
 
   ```
