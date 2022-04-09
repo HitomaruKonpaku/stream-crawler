@@ -1,0 +1,25 @@
+---
+twitcasting:
+  interval: 30000
+  users:
+  - nakiriayame
+
+youtube:
+  interval: 30000
+  users:
+  - UC7fk0CB07ly8oSl0aqKkqFg # Nakiri Ayame Ch. 百鬼あやめ
+
+webhooks:
+  discord:
+  - active: true
+    urls:
+    - https://discord.com/api/webhooks/xxx
+    twitcasting:
+    - <all>
+    youtube:
+    - <all>
+    mentions:
+      roleIds:
+      - 'xxx'
+      userIds:
+      - 'xxx'

@@ -1,30 +1,43 @@
 import { readFileSync } from 'fs'
-import path from 'path'
+import yaml from 'js-yaml'
 import winston from 'winston'
-import { APP_DEFAULT_CONFIG_PATH } from '../constants/app.constant'
 import { logger as baseLogger } from '../logger'
 
 class ConfigManager {
   public config: Record<string, any>
 
   private logger: winston.Logger
-  private configPath: string
 
   constructor() {
     this.logger = baseLogger.child({ label: '[ConfigManager]' })
     this.config = {}
-    this.configPath = path.join(__dirname, APP_DEFAULT_CONFIG_PATH)
-    this.load()
   }
 
-  private load() {
+  public load() {
+    let config: any
+
     try {
-      const config = JSON.parse(readFileSync(this.configPath, 'utf8'))
-      this.logger.debug('load: success')
-      Object.assign(this.config, config)
+      const filePath = 'config.yaml'
+      const payload = readFileSync(filePath, 'utf-8')
+      this.logger.info(`load: ${filePath}`)
+      config = Object.assign(config || {}, yaml.load(payload))
     } catch (error) {
-      this.logger.error(`load: ${error.message}`)
+      this.logger.warn(`load: ${error.message}`)
     }
+
+    if (!config) {
+      try {
+        const filePath = 'config.json'
+        const payload = readFileSync(filePath, 'utf-8')
+        this.logger.info(`load: ${filePath}`)
+        config = Object.assign(config || {}, JSON.parse(payload))
+      } catch (error) {
+        this.logger.warn(`load: ${error.message}`)
+      }
+    }
+
+    this.config = config || {}
+    return this.config
   }
 }
 
