@@ -23,6 +23,15 @@ npm run build
 ## Usage
 
 1. Make sure you can run `yt-dlp` & `ffmpeg` from current working directory
+
+    ```
+    yt-dlp --version
+    ```
+
+    ```
+    ffmpeg -version
+    ```
+
 1. Clone and rename
     - [config.example.yaml](config.example.yaml) to `config.yaml`
     - Or [config.example.yaml](config.example.yaml) to `config.json`
