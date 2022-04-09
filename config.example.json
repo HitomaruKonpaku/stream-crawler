@@ -1,24 +1,14 @@
 {
   "twitcasting": {
-    "interval": 20000,
+    "interval": 30000,
     "users": [
-      {
-        "id": "nakiriayame"
-      },
-      {
-        "id": "c:nakaoka_15"
-      },
-      {}
+      "nakiriayame"
     ]
   },
   "youtube": {
     "interval": 30000,
     "users": [
-      {
-        "name": "Nakiri Ayame",
-        "id": "UC7fk0CB07ly8oSl0aqKkqFg"
-      },
-      {}
+      "UC7fk0CB07ly8oSl0aqKkqFg"
     ]
   },
   "webhooks": {
@@ -26,7 +16,7 @@
       {
         "active": true,
         "urls": [
-          ""
+          "https://discord.com/api/webhooks/xxx"
         ],
         "twitcasting": [
           "<all>"
@@ -35,9 +25,11 @@
           "<all>"
         ],
         "mentions": {
-          "roleIds": [],
+          "roleIds": [
+            "xxx"
+          ],
           "userIds": [
-            "153363129915539457"
+            "xxx"
           ]
         }
       }
