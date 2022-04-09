@@ -2,11 +2,11 @@
 
 ## Description
 
-Script to monitor & download TwitCasting
+> Script to monitor & download TwitCasting, YouTube
 
 ## Requirements
 
-- [Node 14](https://nodejs.org/)
+- [Node 14 or newer](https://nodejs.org/)
 - [ffmpeg](https://www.ffmpeg.org/)
 - [yt-dlp](https://github.com/yt-dlp/yt-dlp)
 
@@ -22,9 +22,13 @@ npm run build
 
 ## Usage
 
-  1. Clone `config.example.json` and rename to `config.json`
+1. Make sure you can run `yt-dlp` & `ffmpeg` from current working directory
+1. Clone and rename
 
-  2. Start normally or with `pm2`
+- [config.example.yaml](config.example.yaml) to `config.yaml`
+- Or [config.example.yaml](config.example.yaml) to `config.json`
+
+1. Start normally or with `pm2`
 
   ```
   npm start
