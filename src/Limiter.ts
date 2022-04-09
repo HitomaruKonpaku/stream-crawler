@@ -1,8 +1,8 @@
 import Bottleneck from 'bottleneck'
 
-export const twitCastingLimiter = new Bottleneck({ maxConcurrent: 10 })
+export const twitCastingLimiter = new Bottleneck({ maxConcurrent: 5 })
 
-export const youTubeLimiter = new Bottleneck({ maxConcurrent: 5 })
+export const youTubeLimiter = new Bottleneck({ maxConcurrent: 2 })
 
 export const discordWebhookLimiter = new Bottleneck({
   reservoir: 5,
