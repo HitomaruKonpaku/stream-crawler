@@ -35,7 +35,7 @@ npm run build
 1. Clone and rename
     - [config.example.yaml](config.example.yaml) to `config.yaml`
     - Or [config.example.json](config.example.json) to `config.json`
-1. Start normally or with `pm2`
+1. Start normally or with [pm2](https://pm2.keymetrics.io)
 
   ```
   npm start
