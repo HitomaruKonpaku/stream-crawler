@@ -2,7 +2,7 @@ import axios from 'axios'
 import EventEmitter from 'events'
 import path from 'path'
 import winston from 'winston'
-import { APP_DEFAULT_REFRESH_INTERVAL, APP_DOWNLOAD_DIR } from '../constants/app.constant'
+import { APP_DEFAULT_REFRESH_INTERVAL } from '../constants/app.constant'
 import { Downloader } from '../Downloader'
 import { twitCastingLimiter } from '../Limiter'
 import { logger as baseLogger } from '../logger'
@@ -70,7 +70,7 @@ export class TwitCastingCrawler extends EventEmitter {
         const movieUrl = TwitCastingUtil.getMovieUrl(user.id, movie.id)
         this.logger.info(`${user.id} live: ${movieUrl}`)
         this.sendWebhooks(user, movie)
-        const output = path.join(__dirname, APP_DOWNLOAD_DIR, 'twitcasting', `[%(uploader_id)s][${Util.getTimeString()}] %(title)s (%(id)s).%(ext)s`)
+        const output = path.join(configManager.getOutDir(), 'twitcasting', `[%(uploader_id)s][${Util.getTimeString()}] %(title)s (%(id)s).%(ext)s`)
         Downloader.downloadUrl(movieUrl, {
           output,
           // Add formatSort due to yt-dlp error

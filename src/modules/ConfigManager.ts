@@ -1,6 +1,8 @@
 import { readFileSync } from 'fs'
 import yaml from 'js-yaml'
+import path from 'path'
 import winston from 'winston'
+import { APP_DOWNLOAD_DIR } from '../constants/app.constant'
 import { logger as baseLogger } from '../logger'
 
 class ConfigManager {
@@ -38,6 +40,11 @@ class ConfigManager {
 
     this.config = config || {}
     return this.config
+  }
+
+  public getOutDir(): string {
+    const s = this.config.output ?? path.join(__dirname, APP_DOWNLOAD_DIR)
+    return s
   }
 }
 

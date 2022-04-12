@@ -2,7 +2,7 @@ import axios from 'axios'
 import EventEmitter from 'events'
 import path from 'path'
 import winston from 'winston'
-import { APP_DEFAULT_REFRESH_INTERVAL, APP_DOWNLOAD_DIR } from '../constants/app.constant'
+import { APP_DEFAULT_REFRESH_INTERVAL } from '../constants/app.constant'
 import { Downloader } from '../Downloader'
 import { youTubeLimiter } from '../Limiter'
 import { logger as baseLogger } from '../logger'
@@ -87,7 +87,7 @@ export class YouTubeCrawler extends EventEmitter {
       const videoUrl = YouTubeUtil.getVideoUrl(videoId)
       this.logger.info(`${user.name} live: ${videoUrl}`)
       this.sendWebhooks(user, videoId)
-      const output = path.join(__dirname, APP_DOWNLOAD_DIR, 'youtube', '[%(uploader)s][%(upload_date)s] %(title)s (%(id)s).%(ext)s')
+      const output = path.join(configManager.getOutDir(), 'youtube', '[%(uploader)s][%(upload_date)s] %(title)s (%(id)s).%(ext)s')
       Downloader.downloadUrl(videoUrl, { output })
     } catch (error) {
       this.logger.error(`checkUserLive ${user.name}: ${error.message}`)

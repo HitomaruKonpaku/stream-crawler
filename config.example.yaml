@@ -1,10 +1,15 @@
 ---
+# Output directory (default to current working folder)
+# output: d:/downloads
+
 twitcasting:
+  # Refresh interval in millisecond
   interval: 30000
   users:
   - nakiriayame
 
 youtube:
+  # Refresh interval in millisecond
   interval: 30000
   users:
   - UC7fk0CB07ly8oSl0aqKkqFg # Nakiri Ayame Ch. 百鬼あやめ
