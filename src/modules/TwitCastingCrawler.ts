@@ -93,7 +93,7 @@ export class TwitCastingCrawler extends EventEmitter {
 
   private async getUser(id: string) {
     const url = `https://frontendapi.twitcasting.tv/users/${id}?detail=true`
-    this.logger.debug(`--> getUser: ${id}`, { id, url })
+    this.logger.debug(`--> getUser: ${id}`)
     const { data } = await axios.get(url)
     this.logger.debug(`<-- getUser: ${id}`)
     return data
@@ -101,7 +101,7 @@ export class TwitCastingCrawler extends EventEmitter {
 
   private async getUserStream(id: string) {
     const url = `https://twitcasting.tv/streamserver.php?target=${id}&mode=client`
-    this.logger.debug(`--> getUserStream: ${id}`, { id, url })
+    this.logger.debug(`--> getUserStream: ${id}`)
     const { data } = await axios.get(url)
     this.logger.debug(`<-- getUserStream: ${id}`)
     return data

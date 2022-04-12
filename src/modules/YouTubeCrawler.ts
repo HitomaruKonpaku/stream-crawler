@@ -96,7 +96,7 @@ export class YouTubeCrawler extends EventEmitter {
 
   private async getChannel(id: string) {
     const url = `https://www.youtube.com/channel/${id}`
-    this.logger.debug(`--> getChannel: ${id}`, { id, url })
+    this.logger.debug(`--> getChannel: ${id}`)
     const { data } = await axios.get<string>(url, { headers: this.headers })
     this.logger.debug(`<-- getChannel: ${id}`)
     return data
@@ -104,7 +104,7 @@ export class YouTubeCrawler extends EventEmitter {
 
   private async getChannelLive(user: User) {
     const url = `https://www.youtube.com/channel/${user.id}/live`
-    this.logger.debug(`--> getChannelLive: ${user.name}`, { id: user.id, url })
+    this.logger.debug(`--> getChannelLive: ${user.name}`)
     const { data } = await axios.get<string>(url, { headers: this.headers })
     this.logger.debug(`<-- getChannelLive: ${user.name}`)
     return data
