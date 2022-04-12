@@ -1,4 +1,5 @@
 import axios from 'axios'
+import * as cheerio from 'cheerio'
 import EventEmitter from 'events'
 import path from 'path'
 import winston from 'winston'
@@ -67,6 +68,7 @@ export class TwitCastingCrawler extends EventEmitter {
       }
       if (movie.live && !this.videoIds.has(movie.id)) {
         this.videoIds.add(movie.id)
+        await this.getMoveMetadata(user, movie)
         const movieUrl = TwitCastingUtil.getMovieUrl(user.id, movie.id)
         this.logger.info(`${user.id} live: ${movieUrl}`)
         this.sendWebhooks(user, movie)
@@ -105,6 +107,20 @@ export class TwitCastingCrawler extends EventEmitter {
     const { data } = await axios.get(url)
     this.logger.debug(`<-- getUserStream: ${id}`)
     return data
+  }
+
+  private async getMoveMetadata(user: User, movie: any) {
+    const url = TwitCastingUtil.getMovieUrl(user.id, movie.id)
+    try {
+      const { data } = await axios.get(url)
+      const $ = cheerio.load(data)
+      const title = $('meta[property=og:title]')?.[0]?.attribs?.content
+      const description = $('meta[property=og:description]')?.[0]?.attribs?.content
+      const thumbnailUrl = $('meta[property=og:image]')?.[0]?.attribs?.content
+      Object.assign(movie, { title, description, thumbnailUrl })
+    } catch (error) {
+      this.logger.error(`getMoveMetadata: ${error.message}`, { url })
+    }
   }
 
   private sendWebhooks(user: User, movie: any) {

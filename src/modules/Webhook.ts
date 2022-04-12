@@ -77,8 +77,8 @@ export class Webhook {
           embeds: [
             {
               type: 'rich',
-              title: 'Live!',
-              description: [`${user.name || user.id} is now live`, TwitCastingUtil.getMovieUrl(user.id, movie.id)].join('\n'),
+              title: `${user.id} live!`,
+              description: TwitCastingUtil.getMovieUrl(user.id, movie.id),
               url: TwitCastingUtil.getUserUrl(user.id),
               color: 0x4589ff,
               author: {
@@ -86,6 +86,17 @@ export class Webhook {
                 url: TwitCastingUtil.getUserUrl(user.id),
                 icon_url: `https:${user.image}`,
               },
+              fields: [
+                {
+                  name: 'Title',
+                  value: movie.title,
+                },
+                {
+                  name: 'Description',
+                  value: movie.description,
+                },
+              ],
+              image: { url: movie.thumbnailUrl },
               footer: {
                 text: 'TwitCasting',
                 icon_url: 'https://twitcasting.tv/img/icon192.png',
