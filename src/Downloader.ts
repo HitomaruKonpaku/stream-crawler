@@ -1,6 +1,7 @@
 // eslint-disable-next-line camelcase
 import child_process, { SpawnOptions } from 'child_process'
 import { logger as baseLogger } from './logger'
+import { configManager } from './modules/ConfigManager'
 
 const logger = baseLogger.child({ label: '[Downloader]' })
 
@@ -14,7 +15,9 @@ export class Downloader {
   ) {
     const cmd = 'yt-dlp'
     const args = []
-    if (options?.output) {
+    const ytdlOptions = Array.from(configManager.config?.ytdlOptions || [])
+    args.push(...ytdlOptions)
+    if (options?.output && !['--output', '-o'].some((v) => ytdlOptions.includes(v))) {
       args.push('--output', options.output)
     }
     if (options?.formatSort) {

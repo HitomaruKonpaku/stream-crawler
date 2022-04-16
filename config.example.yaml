@@ -2,6 +2,11 @@
 # Output directory (default to current working folder)
 # output: d:/downloads
 
+# Additional yt-dlp options
+ytdlOptions:
+#  - --config-location
+#  - d:/yt-dlp/yt-dlp.conf
+
 twitcasting:
   # Refresh interval in millisecond
   interval: 30000
