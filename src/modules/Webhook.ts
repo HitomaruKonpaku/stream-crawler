@@ -62,7 +62,7 @@ export class Webhook {
         return
       }
       try {
-        // Build content with mentions
+        // Build content
         let content = ''
         Array.from(config.mentions?.roleIds || []).forEach((id) => {
           content += `<@&${id}> `
@@ -71,39 +71,44 @@ export class Webhook {
           content += `<@${id}> `
         })
         content = content.trim()
+
+        // Build embed
+        const embed = {
+          type: 'rich',
+          title: `${user.id} live!`,
+          description: TwitCastingUtil.getMovieUrl(user.id, movie.id),
+          url: TwitCastingUtil.getUserUrl(user.id),
+          color: 0x4589ff,
+          author: {
+            name: user.name || user.id,
+            url: TwitCastingUtil.getUserUrl(user.id),
+            icon_url: `https:${user.image}`,
+          },
+          fields: [
+            {
+              name: 'Title',
+              value: movie.title,
+            },
+            {
+              name: 'Description',
+              value: movie.description,
+            },
+          ],
+          footer: {
+            text: 'TwitCasting',
+            icon_url: 'https://twitcasting.tv/img/icon192.png',
+          },
+        }
+        if (movie.thumbnailUrl) {
+          Object.assign(embed, { image: { url: movie.thumbnailUrl } })
+        }
+
         // Build request payload
         const payload = {
           content,
-          embeds: [
-            {
-              type: 'rich',
-              title: `${user.id} live!`,
-              description: TwitCastingUtil.getMovieUrl(user.id, movie.id),
-              url: TwitCastingUtil.getUserUrl(user.id),
-              color: 0x4589ff,
-              author: {
-                name: user.name || user.id,
-                url: TwitCastingUtil.getUserUrl(user.id),
-                icon_url: `https:${user.image}`,
-              },
-              fields: [
-                {
-                  name: 'Title',
-                  value: movie.title,
-                },
-                {
-                  name: 'Description',
-                  value: movie.description,
-                },
-              ],
-              image: { url: movie.thumbnailUrl },
-              footer: {
-                text: 'TwitCasting',
-                icon_url: 'https://twitcasting.tv/img/icon192.png',
-              },
-            },
-          ],
+          embeds: [embed],
         }
+
         // Send
         urls.forEach((url) => discordWebhookLimiter.schedule(() => this.post(url, payload)))
       } catch (error) {
