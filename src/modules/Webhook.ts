@@ -82,7 +82,7 @@ export class Webhook {
           author: {
             name: user.name || user.id,
             url: TwitCastingUtil.getUserUrl(user.id),
-            icon_url: `https:${user.image}`,
+            icon_url: TwitCastingUtil.getUserImageUrl(user),
           },
           fields: [
             {
