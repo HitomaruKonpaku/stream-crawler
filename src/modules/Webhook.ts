@@ -39,7 +39,7 @@ export class Webhook {
       this.logger.debug('<-- post', { requestId })
       return data
     } catch (error) {
-      this.logger.error(`post: ${error.message}`, { requestId })
+      this.logger.error(`post: ${error.message}`, { requestId, body })
     }
     return null
   }
@@ -84,20 +84,18 @@ export class Webhook {
             url: TwitCastingUtil.getUserUrl(user.id),
             icon_url: TwitCastingUtil.getUserImageUrl(user),
           },
-          fields: [
-            {
-              name: 'Title',
-              value: movie.title,
-            },
-            {
-              name: 'Description',
-              value: movie.description,
-            },
-          ],
+          fields: [],
           footer: {
             text: 'TwitCasting',
             icon_url: 'https://twitcasting.tv/img/icon192.png',
           },
+        }
+
+        if (movie.title) {
+          embed.fields.push({ name: 'Title', value: movie.title })
+        }
+        if (movie.description) {
+          embed.fields.push({ name: 'Description', value: movie.description })
         }
         if (movie.thumbnailUrl) {
           Object.assign(embed, { image: { url: movie.thumbnailUrl } })
