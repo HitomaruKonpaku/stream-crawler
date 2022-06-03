@@ -35,8 +35,8 @@ export class TwitCastingCrawler extends EventEmitter {
     const config = configManager.config?.twitcasting || {}
     this.interval = config.interval || APP_DEFAULT_REFRESH_INTERVAL
     this.users = Array.from<any>(config.users || [])
-      .filter((v) => typeof v === 'string' || v.id)
-      .map((v) => (typeof v !== 'string' ? v : { id: v }))
+      .filter((v) => typeof v === 'string' || typeof v === 'number' || v.id)
+      .map((v) => (typeof v === 'string' || typeof v === 'number' ? { id: String(v) } : v))
 
     this.users.forEach((user) => this.monitorUser(user))
   }
