@@ -6,6 +6,12 @@
 ytdlOptions:
 #  - --config-location
 #  - d:/yt-dlp/yt-dlp.conf
+#  - -f
+#  - "bestvideo*+bestaudio/best"
+#  - -o
+#  - "./download/%(id)s.%(ext)s"
+#  - --cookies-from-browser
+#  - chrome
 
 twitcasting:
   # Refresh interval in millisecond
