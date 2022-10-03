@@ -3,7 +3,7 @@
 # output: d:/downloads
 
 # Additional yt-dlp options
-ytdlOptions:
+ytdlytOptions:
 #  - --config-location
 #  - d:/yt-dlp/yt-dlp.conf
 #  - -f
@@ -12,6 +12,11 @@ ytdlOptions:
 #  - "./download/%(id)s.%(ext)s"
 #  - --cookies-from-browser
 #  - chrome
+
+ytdltwOptions:
+#  - --write-thumbnail
+#  - --extract-audio
+
 
 twitcasting:
   # Refresh interval in millisecond
