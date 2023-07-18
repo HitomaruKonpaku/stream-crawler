@@ -1,0 +1,12 @@
+version: "3"
+services:
+  stream-crawler:
+    image: ghcr.io/HitomaruKonpaku/stream-crawler:latest
+    container_name: stream-crawler
+    restart: always
+    network_mode: "host"
+    user: "1000:1000"
+    volumes:
+      - ./twitcast/config.yaml:/app/config.yaml
+      - ./twitcast/logs:/app/logs
+      - ../raw/twitcasting:/app/download
