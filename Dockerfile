@@ -4,9 +4,6 @@ FROM node:18-alpine AS base
 
 WORKDIR /app
 
-RUN apk add --no-cache ffmpeg
-RUN apk add --no-cache yt-dlp
-
 COPY . /app/
 
 RUN npm install
@@ -19,6 +16,9 @@ FROM node:18-alpine
 WORKDIR /app
 
 ENV NODE_ENV=production
+
+RUN apk add --no-cache ffmpeg
+RUN apk add --no-cache yt-dlp
 
 COPY --from=base /app/dist ./dist
 COPY --from=base /app/package.json .
