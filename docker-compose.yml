@@ -7,6 +7,6 @@ services:
     network_mode: "host"
     user: "1000:1000"
     volumes:
-      - ./twitcast/config.yaml:/app/config.yaml
-      - ./twitcast/logs:/app/logs
-      - ../raw/twitcasting:/app/download
+      - ./config.yaml:/app/config.yaml
+      - ./logs:/app/logs
+      - ./download:/app/download
