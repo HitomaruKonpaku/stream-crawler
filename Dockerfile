@@ -21,7 +21,7 @@ RUN apk add --no-cache ffmpeg
 RUN apk add --no-cache yt-dlp
 
 COPY --from=base /app/package.json /app/package-lock.json /app/
-COPY --from=base /app/stream-crawler/dist /app/dist
+COPY --from=base /app/dist /app/dist
 
 RUN npm ci
 
