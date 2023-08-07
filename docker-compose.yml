@@ -1,0 +1,12 @@
+version: "3"
+services:
+  stream-crawler:
+    image: ghcr.io/hitomarukonpaku/stream-crawler:latest
+    container_name: stream-crawler
+    restart: always
+    network_mode: "host"
+    user: "1000:1000"
+    volumes:
+      - ./config.yaml:/app/config.yaml
+      - ./logs:/app/logs
+      - ./download:/app/download
