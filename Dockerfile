@@ -1,6 +1,6 @@
 # Build
 
-FROM node:18-alpine AS base
+FROM node:22-alpine AS base
 
 WORKDIR /app
 
@@ -11,7 +11,7 @@ RUN npm run build
 
 # Production
 
-FROM node:18-alpine AS runner
+FROM node:22-alpine AS runner
 
 WORKDIR /app
 
