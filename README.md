@@ -22,6 +22,18 @@ npm run build
 
 ## Usage
 
+### Docker
+
+- See [example](./example/)
+- Download [docker-compose.yaml](./example/docker-compose.yaml) and [config.yaml](./example/config.yaml)
+- Run
+
+    ```sh
+    docker compose up -d
+    ```
+
+### Local
+
 1. Make sure you can run `yt-dlp` & `ffmpeg` from current working directory
 
     ```
