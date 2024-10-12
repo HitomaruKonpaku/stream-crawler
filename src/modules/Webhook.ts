@@ -7,6 +7,18 @@ import { TwitCastingUtil } from '../utils/TwitCastingUtil'
 import { YouTubeUtil } from '../utils/YouTubeUtil'
 import { configManager } from './ConfigManager'
 
+interface WebhookConfig {
+  active?: boolean
+  urls?: string[]
+  twitcasting?: string[]
+  youtube?: string[]
+  message?: string
+  mentions?: {
+    userIds?: string
+    roleIds?: string
+  }
+}
+
 export class Webhook {
   private logger: winston.Logger
 
@@ -46,10 +58,11 @@ export class Webhook {
 
   private sendTwitCastingDiscord(user: any, movie: any) {
     const configs = Array.from<any>(this.config?.discord || [])
-    configs.forEach((config) => {
+    configs.forEach((config: WebhookConfig) => {
       if (!config.active) {
         return
       }
+
       const urls = Array.from<string>(config.urls || [])
         .filter((v) => v)
       const twitcastingIds = Array.from<string>(config.twitcasting || [])
@@ -58,9 +71,11 @@ export class Webhook {
       if (!urls.length || !twitcastingIds.length) {
         return
       }
+
       if (!twitcastingIds.find((v) => v === '<all>') && !twitcastingIds.some((v) => v === user.id.toLowerCase())) {
         return
       }
+
       try {
         // Build content
         let content = ''
@@ -70,7 +85,11 @@ export class Webhook {
         Array.from(config.mentions?.userIds || []).forEach((id) => {
           content += `<@${id}> `
         })
-        content = content.trim()
+
+        content = [
+          config.message,
+          content,
+        ].filter(v => v).map((v) => v.trim()).join('\n')
 
         // Build embed
         const embed = {
@@ -117,10 +136,11 @@ export class Webhook {
 
   private sendYouTubeDiscord(user: any, videoId: string) {
     const configs = Array.from<any>(this.config?.discord || [])
-    configs.forEach((config) => {
+    configs.forEach((config: WebhookConfig) => {
       if (!config.active) {
         return
       }
+
       const urls = Array.from<string>(config.urls || [])
         .filter((v) => v)
       const channelIds = Array.from<string>(config.youtube || [])
@@ -129,9 +149,11 @@ export class Webhook {
       if (!urls.length || !channelIds.length) {
         return
       }
+
       if (!channelIds.find((v) => v === '<all>') && !channelIds.some((v) => v === user.id.toLowerCase())) {
         return
       }
+
       try {
         // Build content with mentions
         let content = ''
@@ -141,9 +163,16 @@ export class Webhook {
         Array.from(config.mentions?.userIds || []).forEach((id) => {
           content += `<@${id}> `
         })
-        content = [content, YouTubeUtil.getVideoUrl(videoId)].map((v) => v.trim()).join('\n')
+
+        content = [
+          config.message,
+          content,
+          YouTubeUtil.getVideoUrl(videoId),
+        ].filter(v => v).map((v) => v.trim()).join('\n')
+
         // Build request payload
         const payload = { content }
+
         // Send
         urls.forEach((url) => discordWebhookLimiter.schedule(() => this.post(url, payload)))
       } catch (error) {

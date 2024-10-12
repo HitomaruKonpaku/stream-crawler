@@ -70,7 +70,7 @@ export class TwitCastingCrawler extends EventEmitter {
         this.videoIds.add(movie.id)
         await this.getMoveMetadata(user, movie)
         const movieUrl = TwitCastingUtil.getMovieUrl(user.id, movie.id)
-        this.logger.info(`${user.id} live: ${movieUrl}`)
+        this.logger.warn(`${user.id} live: ${movieUrl}`)
         this.sendWebhooks(user, movie)
         const output = path.join(configManager.getOutDir(), 'twitcasting', `[%(uploader_id)s][${Util.getTimeString()}] %(title)s (%(id)s).%(ext)s`)
         Downloader.downloadUrl(movieUrl, {
@@ -105,7 +105,7 @@ export class TwitCastingCrawler extends EventEmitter {
     const url = `https://twitcasting.tv/streamserver.php?target=${id}&mode=client`
     this.logger.debug(`--> getUserStream: ${id}`)
     const { data } = await axios.get(url)
-    this.logger.debug(`<-- getUserStream: ${id}`)
+    // this.logger.debug(`<-- getUserStream: ${id}`)
     return data
   }
 

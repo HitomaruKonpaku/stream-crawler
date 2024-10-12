@@ -13,7 +13,7 @@ function getFileName() {
 }
 
 const consoleTransport = new winston.transports.Console({
-  level: 'info',
+  level: process.env.LOG_LEVEL || 'info',
   format: format.combine(
     format.colorize(),
     getPrintFormat(),
