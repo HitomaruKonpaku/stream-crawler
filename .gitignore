@@ -9,3 +9,5 @@ download/
 .env
 config.json
 config.yaml
+
+!example/**/config.yaml
