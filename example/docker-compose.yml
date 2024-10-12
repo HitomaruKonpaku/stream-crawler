@@ -1,0 +1,12 @@
+---
+services:
+  stream-crawler:
+    container_name: stream-crawler
+    image: ghcr.io/hitomarukonpaku/stream-crawler
+    restart: always
+    environment:
+      LOG_LEVEL: verbose # debug/verbose/info
+    volumes:
+      - ./config.yaml:/app/config.yaml
+      - ./logs:/app/logs
+      - ./download:/app/download

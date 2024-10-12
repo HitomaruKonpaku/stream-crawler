@@ -1,0 +1,14 @@
+---
+twitcasting:
+  interval: 10000
+  users:
+    - nakiriayame
+
+webhooks:
+  discord:
+    - active: true
+      urls:
+        # - https://discord.com/api/webhooks/<token>
+      twitcasting:
+        - <all>
+      message: "<@153363129915539457>"
