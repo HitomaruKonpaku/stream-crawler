@@ -10,6 +10,18 @@
 - [ffmpeg](https://www.ffmpeg.org/)
 - [yt-dlp](https://github.com/yt-dlp/yt-dlp)
 
+### Docker
+
+- See [example](./example/)
+- Download [docker-compose.yaml](./example/docker-compose.yaml) & [config.yaml](./example/config.yaml)
+- Save cookies as file with Netscape format (OPTIONAL)
+  - Try [Open Cookies.txt](https://chromewebstore.google.com/detail/open-cookiestxt/gdocmgbfkjnnpapoeobnolbbkoibbcif) on Chrome
+- Run
+
+    ```sh
+    docker compose up -d
+    ```
+
 ## Installation
 
 ```
@@ -21,18 +33,6 @@ npm run build
 ```
 
 ## Usage
-
-### Docker
-
-- See [example](./example/)
-- Download [docker-compose.yaml](./example/docker-compose.yaml) and [config.yaml](./example/config.yaml)
-- Run
-
-    ```sh
-    docker compose up -d
-    ```
-
-### Local
 
 1. Make sure you can run `yt-dlp` & `ffmpeg` from current working directory
 
