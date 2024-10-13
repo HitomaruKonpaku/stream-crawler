@@ -41,4 +41,4 @@ RUN chmod a+rx /usr/local/bin/yt-dlp
 COPY --from=dependencies /app/node_modules ./node_modules
 COPY --from=builder      /app/dist ./dist
 
-CMD [ "/sbin/tini", "--", "node", "dist/index" ]
+ENTRYPOINT [ "/sbin/tini", "--", "node", "dist/index" ]

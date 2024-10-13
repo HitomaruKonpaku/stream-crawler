@@ -9,14 +9,16 @@ import { configManager } from './ConfigManager'
 
 interface WebhookConfig {
   active?: boolean
+
   urls?: string[]
-  twitcasting?: string[]
-  youtube?: string[]
   message?: string
   mentions?: {
     userIds?: string
     roleIds?: string
   }
+
+  twitcasting?: string[]
+  youtube?: string[]
 }
 
 export class Webhook {
