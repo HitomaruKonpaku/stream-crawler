@@ -10,12 +10,12 @@ COPY package*.json ./
 # DEPENDENCIES
 FROM base AS dependencies
 
-RUN npm install --no-progress --omit=dev
+RUN npm ci --omit=dev
 
 # BUILDER
 FROM base AS builder
 
-RUN npm install
+RUN npm ci
 
 COPY . .
 
@@ -29,10 +29,9 @@ ENV NODE_ENV=production
 VOLUME /app/logs
 VOLUME /app/download
 
-RUN apk add --no-cache curl yt-dlp
-
-# Remove current yt-dlp
-RUN rm -rf /usr/bin/yt-dlp
+RUN apk add --no-cache curl
+RUN apk add --no-cache ffmpeg
+RUN apk add --no-cache python3 py3-pip py3-websockets
 
 # Install latest yt-dlp
 RUN curl -L -o /usr/local/bin/yt-dlp https://github.com/yt-dlp/yt-dlp/releases/latest/download/yt-dlp
