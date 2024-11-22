@@ -1,3 +1,4 @@
+import 'dotenv/config'
 import { logger } from './logger'
 import { configManager } from './modules/ConfigManager'
 import { twitCastingCrawler } from './modules/TwitCastingCrawler'
