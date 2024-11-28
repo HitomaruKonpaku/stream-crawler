@@ -15,7 +15,14 @@ export class Downloader {
   ) {
     const cmd = 'yt-dlp'
     const args = []
-    const ytdlOptions = Array.from(configManager.config?.ytdlOptions || [])
+    if (url.includes('twitcast')) {
+    var ytdlOptions = Array.from(configManager.config?.ytdltwOptions || [])
+    }
+    else
+    {
+    var ytdlOptions = Array.from(configManager.config?.ytdlytOptions || [])      
+    }
+    
     args.push(...ytdlOptions)
     if (options?.output && !['--output', '-o'].some((v) => ytdlOptions.includes(v))) {
       args.push('--output', options.output)
