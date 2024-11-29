@@ -66,13 +66,24 @@ export class TwitCastingCrawler extends EventEmitter {
         this.checkUserWithTimeout(user)
         return
       }
+
       if (movie.live && !this.videoIds.has(movie.id)) {
         this.videoIds.add(movie.id)
         await this.getMoveMetadata(user, movie)
+
         const movieUrl = TwitCastingUtil.getMovieUrl(user.id, movie.id)
         this.logger.warn(`${user.id} live: ${movieUrl}`)
         this.sendWebhooks(user, movie)
-        const output = path.join(configManager.getOutDir(), 'twitcasting', `[%(uploader_id)s][${Util.getTimeString()}] %(title)s (%(id)s).%(ext)s`)
+
+        const output = path.join(
+          configManager.getOutDir(),
+          'twitcasting',
+          `[%(uploader_id)s][${Util.getTimeString()}] %(title)s (%(id)s).%(ext)s`,
+        )
+
+        const sleepMs = Number(process.env.TWITCASTING_DOWNLOAD_DELAY) || 0
+        await Util.sleep(sleepMs)
+
         Downloader.downloadUrl(movieUrl, {
           output,
           // Add formatSort due to yt-dlp error
