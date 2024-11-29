@@ -91,7 +91,7 @@ export class Webhook {
         content = [
           config.message,
           content,
-        ].filter(v => v).map((v) => v.trim()).join('\n')
+        ].filter((v) => v).map((v) => v.trim()).join('\n')
 
         // Build embed
         const embed = {
@@ -170,7 +170,7 @@ export class Webhook {
           config.message,
           content,
           YouTubeUtil.getVideoUrl(videoId),
-        ].filter(v => v).map((v) => v.trim()).join('\n')
+        ].filter((v) => v).map((v) => v.trim()).join('\n')
 
         // Build request payload
         const payload = { content }
