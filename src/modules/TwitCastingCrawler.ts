@@ -1,3 +1,5 @@
+/* eslint-disable class-methods-use-this */
+
 import axios from 'axios'
 import * as cheerio from 'cheerio'
 import EventEmitter from 'events'
@@ -114,7 +116,7 @@ export class TwitCastingCrawler extends EventEmitter {
 
   private async getUserStream(id: string) {
     const url = `https://twitcasting.tv/streamserver.php?target=${id}&mode=client`
-    this.logger.debug(`--> getUserStream: ${id}`)
+    // this.logger.debug(`--> getUserStream: ${id}`)
     const { data } = await axios.get(url)
     // this.logger.debug(`<-- getUserStream: ${id}`)
     return data
