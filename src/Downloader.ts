@@ -26,10 +26,32 @@ export class Downloader {
     args.push(url)
     logger.verbose(`${cmd} ${args.join(' ')}`)
 
-    const spawnOptions: SpawnOptions = { detached: true, stdio: 'ignore', cwd: process.cwd() }
+    const spawnOptions: SpawnOptions = {
+      cwd: process.cwd(),
+      // detached: true,
+      // stdio: 'inherit',
+    }
+
     const cp = process.platform === 'win32'
       ? child_process.spawn(process.env.comspec, ['/c', cmd, ...args], spawnOptions)
       : child_process.spawn(cmd, args, spawnOptions)
+
+    if (cp.stdout) {
+      cp.stdout.setEncoding('utf8')
+      cp.stdout.on('data', (data) => {
+        const msg = data.toString()
+        logger.debug(msg)
+      })
+    }
+
+    if (cp.stderr) {
+      cp.stderr.setEncoding('utf8')
+      cp.stderr.on('data', (data) => {
+        const msg = data.toString()
+        logger.debug(msg)
+      })
+    }
+
     cp.unref()
   }
 }
