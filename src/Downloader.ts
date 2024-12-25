@@ -3,6 +3,7 @@ import child_process, { SpawnOptions } from 'child_process'
 import winston from 'winston'
 import DailyRotateFile from 'winston-daily-rotate-file'
 import { LOGGER_DATE_PATTERN, LOGGER_DIR } from './constants/logger.constant'
+import { configManager } from './modules/ConfigManager'
 
 function getFileName() {
   return `${process.env.NODE_ENV || 'dev'}.downloader.%DATE%`
@@ -44,6 +45,12 @@ export class Downloader {
 
     args.push('--loglevel', 'debug')
     args.push('--output', options?.output || './{author}/{time:%Y%m%d%H%M%S}-{id}.mp4')
+
+    const streamlinkOptions: string[] = Array.from(configManager.config?.streamlinkOptions || [])
+    if (streamlinkOptions.length) {
+      args.push(...streamlinkOptions)
+    }
+
     args.push(url)
     args.push('best')
 

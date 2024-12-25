@@ -4,38 +4,45 @@
 
 # Additional yt-dlp options
 ytdlOptions:
-#  - --config-location
-#  - d:/yt-dlp/yt-dlp.conf
-#  - -f
-#  - "bestvideo*+bestaudio/best"
-#  - -o
-#  - "./download/%(id)s.%(ext)s"
-#  - --cookies-from-browser
-#  - chrome
+#   - --config-location
+#   - d:/yt-dlp/yt-dlp.conf
+#   - -f
+#   - "bestvideo*+bestaudio/best"
+#   - -o
+#   - "./download/%(id)s.%(ext)s"
+#   - --cookies-from-browser
+#   - chrome
+
+# Additional streamlink options
+streamlinkOptions:
+  # - --http-cookie
+  # - tc_id=xxx
+  # - --http-cookie
+  # - tc_ss=xxx
 
 twitcasting:
   # Refresh interval in millisecond
   interval: 30000
   users:
-  - nakiriayame
+    - nakiriayame
 
 youtube:
   # Refresh interval in millisecond
   interval: 30000
   users:
-  - UC7fk0CB07ly8oSl0aqKkqFg # Nakiri Ayame Ch. 百鬼あやめ
+    - UC7fk0CB07ly8oSl0aqKkqFg # Nakiri Ayame Ch. 百鬼あやめ
 
 webhooks:
   discord:
-  - active: true
-    urls:
-    - https://discord.com/api/webhooks/xxx
-    twitcasting:
-    - <all>
-    youtube:
-    - <all>
-    mentions:
-      roleIds:
-      - 'xxx'
-      userIds:
-      - 'xxx'
+    - active: true
+      urls:
+        - https://discord.com/api/webhooks/xxx
+      twitcasting:
+        - <all>
+      youtube:
+        - <all>
+      mentions:
+        roleIds:
+          - "xxx"
+        userIds:
+          - "xxx"
