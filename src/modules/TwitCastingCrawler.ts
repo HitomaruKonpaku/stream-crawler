@@ -77,10 +77,19 @@ export class TwitCastingCrawler extends EventEmitter {
         this.logger.warn(`${user.id} live: ${movieUrl}`)
         this.sendWebhooks(user, movie)
 
+        const fileName = [
+          `[${user.id.replace(/[:]/g, '_')}]`,
+          `[${Util.getTimeString()}]`,
+          ' ',
+          `(${movie.id})`,
+          '.mp4',
+        ].join('')
+
         const output = path.join(
           configManager.getOutDir(),
           'twitcasting',
-          `[%(uploader_id)s][${Util.getTimeString()}] %(title)s (%(id)s).%(ext)s`,
+          // `[%(uploader_id)s][${Util.getTimeString()}] %(title)s (%(id)s).%(ext)s`,
+          fileName,
         )
 
         const sleepMs = Number(process.env.TWITCASTING_DOWNLOAD_DELAY) || 0
