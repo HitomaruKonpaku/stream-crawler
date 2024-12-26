@@ -1,10 +1,10 @@
 ---
 # Additional streamlink options
 streamlinkOptions:
-  - --http-cookie
-  - tc_id=xxx
-  - --http-cookie
-  - tc_ss=xxx
+  # - --http-cookie
+  # - tc_id=xxx
+  # - --http-cookie
+  # - tc_ss=xxx
 
 twitcasting:
   # Refresh interval in millisecond
