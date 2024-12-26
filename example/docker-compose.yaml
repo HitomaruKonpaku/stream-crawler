@@ -7,8 +7,6 @@ services:
     environment:
       LOG_LEVEL: verbose # debug/verbose/info
     volumes:
-      - ./yt-dlp.conf:/etc/yt-dlp.conf
-      # - ./cookies.txt:/cookies.txt # provide cookies to access membership vod
       - ./config.yaml:/app/config.yaml
       - ./logs:/app/logs
       - ./download:/app/download
