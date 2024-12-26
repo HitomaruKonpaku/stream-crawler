@@ -1,5 +1,13 @@
 ---
+# Additional streamlink options
+streamlinkOptions:
+  - --http-cookie
+  - tc_id=xxx
+  - --http-cookie
+  - tc_ss=xxx
+
 twitcasting:
+  # Refresh interval in millisecond
   interval: 10000
   users:
     - nakiriayame

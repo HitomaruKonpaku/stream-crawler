@@ -2,17 +2,6 @@
 # Output directory (default to current working folder)
 # output: d:/downloads
 
-# Additional yt-dlp options
-ytdlOptions:
-#   - --config-location
-#   - d:/yt-dlp/yt-dlp.conf
-#   - -f
-#   - "bestvideo*+bestaudio/best"
-#   - -o
-#   - "./download/%(id)s.%(ext)s"
-#   - --cookies-from-browser
-#   - chrome
-
 # Additional streamlink options
 streamlinkOptions:
   # - --http-cookie
@@ -26,12 +15,6 @@ twitcasting:
   users:
     - nakiriayame
 
-youtube:
-  # Refresh interval in millisecond
-  interval: 30000
-  users:
-    - UC7fk0CB07ly8oSl0aqKkqFg # Nakiri Ayame Ch. 百鬼あやめ
-
 webhooks:
   discord:
     - active: true
@@ -39,10 +22,4 @@ webhooks:
         - https://discord.com/api/webhooks/xxx
       twitcasting:
         - <all>
-      youtube:
-        - <all>
-      mentions:
-        roleIds:
-          - "xxx"
-        userIds:
-          - "xxx"
+      message: "<@153363129915539457>"
