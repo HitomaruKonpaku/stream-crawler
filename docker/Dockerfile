@@ -29,6 +29,7 @@ ENV NODE_ENV=production
 VOLUME /app/logs
 VOLUME /app/download
 
+RUN apk add --no-cache bash
 # RUN apk add --no-cache curl
 RUN apk add --no-cache ffmpeg
 # RUN apk add --no-cache python3 py3-pip py3-websockets
