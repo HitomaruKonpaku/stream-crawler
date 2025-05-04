@@ -2,6 +2,13 @@
 # Output directory (default to current working folder)
 # output: d:/downloads
 
+# Additional yt-dlp options
+ytdlOptions:
+#  - -f
+#  - "bestvideo*+bestaudio/best"
+#  - -o
+#  - "./download/%(id)s.%(ext)s"
+
 # Additional streamlink options
 streamlinkOptions:
   # - --http-cookie

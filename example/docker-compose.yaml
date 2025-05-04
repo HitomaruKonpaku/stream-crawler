@@ -3,10 +3,13 @@ services:
   stream-crawler:
     container_name: stream-crawler
     image: ghcr.io/hitomarukonpaku/stream-crawler
-    restart: always
+    restart: unless-stopped
     environment:
       LOG_LEVEL: verbose # debug/verbose/info
+      TWITCASTING_DOWNLOADER: yt-dlp # yt-dlp/streamlink
     volumes:
+      - ./yt-dlp.conf:/etc/yt-dlp.conf
+      # - ./cookies.txt:/cookies.txt # provide cookies to access membership vod
       - ./config.yaml:/app/config.yaml
       - ./logs:/app/logs
       - ./download:/app/download

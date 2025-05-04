@@ -25,35 +25,45 @@ export class Downloader {
     url: string,
     options?: {
       output?: string
-      // formatSort?: string
+      formatSort?: string
     },
   ) {
-    // const cmd = 'yt-dlp'
-    const cmd = 'streamlink'
+    let cmd = 'yt-dlp'
     const args: string[] = []
 
-    // const ytdlOptions: string[] = Array.from(configManager.config?.ytdlOptions || [])
-    // args.push(...ytdlOptions)
+    if (process.env.TWITCASTING_DOWNLOADER === 'streamlink') {
+      cmd = 'streamlink'
 
-    // if (options?.output && !['--output', '-o'].some((v) => ytdlOptions.includes(v))) {
-    //   args.push('--output', options.output)
-    // }
+      args.push('--loglevel', 'debug')
+      args.push('--output', options?.output || './{author}/{time:%Y%m%d%H%M%S}-{id}.mp4')
 
-    // if (options?.formatSort) {
-    //   args.push('--format-sort', options.formatSort)
-    // }
+      const opts: string[] = Array.from(configManager.config?.streamlinkOptions || [])
+      if (opts.length) {
+        args.push(...opts)
+      }
 
-    args.push('--loglevel', 'debug')
-    args.push('--output', options?.output || './{author}/{time:%Y%m%d%H%M%S}-{id}.mp4')
+      args.push(url)
+      args.push('best')
+    } else {
+      const opts = configManager.config?.ytdlOptions
+        || configManager.config?.ytdlpOptions
+        || []
+      if (opts.length) {
+        args.push(...opts)
+      }
 
-    const streamlinkOptions: string[] = Array.from(configManager.config?.streamlinkOptions || [])
-    if (streamlinkOptions.length) {
-      args.push(...streamlinkOptions)
+      if (options?.output && !['--output', '-o'].some((v) => opts.includes(v))) {
+        args.push('--output', options.output)
+      }
+
+      if (options?.formatSort) {
+        args.push('--format-sort', options.formatSort)
+      }
+
+      args.push(url)
     }
 
-    args.push(url)
-    args.push('best')
-
+    logger.verbose(JSON.stringify({ cmd, args }))
     logger.verbose(`${cmd} ${args.join(' ')}`)
 
     const spawnOptions: SpawnOptions = {
