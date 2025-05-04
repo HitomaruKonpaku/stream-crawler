@@ -56,3 +56,13 @@ npm run build
   ```
   pm2 start ecosystem.config.js
   ```
+
+## Update yt-dlp inside docker container
+
+```sh
+docker exec -it stream-crawler /bin/bash
+```
+
+```sh
+yt-dlp --update-to master
+```
