@@ -7,6 +7,7 @@ services:
     environment:
       LOG_LEVEL: verbose # debug/verbose/info
       TWITCASTING_DOWNLOADER: yt-dlp # yt-dlp/streamlink
+      TWITCASTING_DOWNLOAD_DELAY: 0
     volumes:
       - ./yt-dlp.conf:/etc/yt-dlp.conf
       # - ./cookies.txt:/cookies.txt # provide cookies to access membership vod
