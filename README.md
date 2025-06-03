@@ -60,9 +60,5 @@ npm run build
 ## Update yt-dlp inside docker container
 
 ```sh
-docker exec -it stream-crawler /bin/bash
-```
-
-```sh
-yt-dlp --update-to master
+docker exec -it stream-crawler yt-dlp --update-to master
 ```
