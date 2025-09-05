@@ -22,7 +22,7 @@ RUN npm run build
 # RELEASE
 FROM base AS release
 
-RUN apk add --no-cache tini bash
+RUN apk add --no-cache bash tini htop
 RUN apk add --no-cache curl
 RUN apk add --no-cache ffmpeg
 RUN apk add --no-cache python3 py3-pip py3-websockets
